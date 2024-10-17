@@ -15,28 +15,31 @@ const isAuthenticated = () => {
 function App() {
   const [darkTheme, setDarkTheme] = useState(true);
   const [collapsed, setCollapsed] = useState(false);
-  const [isSmallScreen, setIsSmallScreen] = useState(false); // Para detectar telas menores que 1200px
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isAuthenticated()) {
-      navigate('/login');
-    }
+    const checkAuth = () => {
+      if (!isAuthenticated()) {
+        navigate('/login');
+      }
+    };
+
+    checkAuth(); // Verifica na carga inicial
+
+    const intervalId = setInterval(checkAuth, 10000); // Verifica a cada 10 segundos
+
+    return () => clearInterval(intervalId); // Limpa o intervalo ao desmontar
   }, [navigate]);
 
-  // Verifica o tamanho da tela ao carregar a página
   useEffect(() => {
     const handleResize = () => {
       setIsSmallScreen(window.innerWidth < 1200);
     };
 
-    // Define o estado inicial
     handleResize();
-
-    // Adiciona o evento para monitorar o redimensionamento
     window.addEventListener('resize', handleResize);
 
-    // Limpa o evento ao desmontar o componente
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -72,7 +75,7 @@ function App() {
             theme={darkTheme ? 'dark' : 'light'}
             className='sidebar'
             style={{
-              overflowY: isSmallScreen ? 'auto' : 'hidden', // Adiciona rolagem apenas em telas menores
+              overflowY: isSmallScreen ? 'auto' : 'hidden',
               maxHeight: '100vh',
             }}
           >
@@ -102,7 +105,7 @@ function App() {
         </>
       ) : (
         <Layout style={{ padding: 0 }}>
-          <Content style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
+          <Content style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
             <AppRoutes />
           </Content>
         </Layout>
