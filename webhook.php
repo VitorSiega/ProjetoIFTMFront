@@ -7,6 +7,9 @@ $dotenv->load();
 
 $secretKey = $_ENV['SECRET_KEY'];
 
+// Defina o cabeçalho para a resposta JSON
+header('Content-Type: application/json');
+
 // Verifique se a chave secreta foi fornecida
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $key = $_SERVER['HTTP_X_SECRET_KEY'] ?? '';
@@ -18,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Chame o seu script de deploy
-    $output = shell_exec('bash /home/airsof45/deploy.sh 2>&1');
+    $output = shell_exec('bash /home/airsoft45/deploy.sh 2>&1');
     echo json_encode(['output' => $output]);
 } else {
     http_response_code(405);
