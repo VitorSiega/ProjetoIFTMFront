@@ -12,16 +12,35 @@ const isAuthenticated = () => {
   return !!localStorage.getItem('token');
 };
 
+async function validateToken(token) {
+  // Faça uma chamada para a API para validar o token
+  const response = await fetch('/api/token/verify', {
+    method: 'GET', // Use GET para verificar o token
+    headers: {
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+
+  // A resposta estará ok se o token for válido
+  return response.ok; 
+}
+
 function App() {
   const [darkTheme, setDarkTheme] = useState(true);
   const [collapsed, setCollapsed] = useState(false);
-  const [isSmallScreen, setIsSmallScreen] = useState(false); // Para detectar telas menores que 1200px
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!isAuthenticated()) {
-      navigate('/login');
-    }
+    const checkAuthentication = async () => {
+      const token = localStorage.getItem('token');
+      if (!token || !(await validateToken(token))) {
+        localStorage.removeItem('token'); // Remove token inválido
+        navigate('/login');
+      }
+    };
+
+    checkAuthentication();
   }, [navigate]);
 
   // Verifica o tamanho da tela ao carregar a página
@@ -30,13 +49,8 @@ function App() {
       setIsSmallScreen(window.innerWidth < 1200);
     };
 
-    // Define o estado inicial
     handleResize();
-
-    // Adiciona o evento para monitorar o redimensionamento
     window.addEventListener('resize', handleResize);
-
-    // Limpa o evento ao desmontar o componente
     return () => {
       window.removeEventListener('resize', handleResize);
     };
@@ -72,7 +86,7 @@ function App() {
             theme={darkTheme ? 'dark' : 'light'}
             className='sidebar'
             style={{
-              overflowY: isSmallScreen ? 'auto' : 'hidden', // Adiciona rolagem apenas em telas menores
+              overflowY: isSmallScreen ? 'auto' : 'hidden',
               maxHeight: '100vh',
             }}
           >
@@ -102,7 +116,7 @@ function App() {
         </>
       ) : (
         <Layout style={{ padding: 0 }}>
-          <Content style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
+          <Content style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
             <AppRoutes />
           </Content>
         </Layout>
