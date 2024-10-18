@@ -1,16 +1,12 @@
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
 import { Button, Layout, Modal, theme } from 'antd';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Logo from './components/Logo';
 import MenuList from './components/MenuList';
 import AppRoutes from './Routes';
 
 const { Header, Sider, Content } = Layout;
-
-const isAuthenticated = () => {
-  return !!localStorage.getItem('token');
-};
 
 async function validateToken(token) {
   // Faça uma chamada para a API para validar o token
@@ -30,18 +26,28 @@ function App() {
   const [collapsed, setCollapsed] = useState(false);
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation(); // Hook para monitorar a localização
 
-  useEffect(() => {
-    const checkAuthentication = async () => {
-      const token = localStorage.getItem('token');
-      if (!token || !(await validateToken(token))) {
+  const checkAuthentication = async () => {
+    const token = localStorage.getItem('token');
+
+    if (token) {
+      const isValid = await validateToken(token);
+      if (!isValid) {
         localStorage.removeItem('token'); // Remove token inválido
         navigate('/login');
       }
-    };
+    } else {
+      navigate('/login'); // Navega para login se o token estiver vazio
+    }
+  };
 
-    checkAuthentication();
-  }, [navigate]);
+  useEffect(() => {
+    checkAuthentication(); // Verifica a autenticação ao carregar o componente
+
+    const interval = setInterval(checkAuthentication, 10000); // Verifica a cada 10 segundos
+    return () => clearInterval(interval); // Limpa o intervalo ao desmontar o componente
+  }, [navigate, location]);
 
   // Verifica o tamanho da tela ao carregar a página
   useEffect(() => {
@@ -62,7 +68,7 @@ function App() {
       content: 'Tem certeza de que deseja deslogar?',
       onOk: () => {
         localStorage.removeItem('token');
-        navigate('/login');
+        navigate('/login'); // Redireciona para a página de login após logout
       },
     });
   };
@@ -77,7 +83,7 @@ function App() {
 
   return (
     <Layout style={{ minHeight: '100%' }}>
-      {isAuthenticated() ? (
+      {localStorage.getItem('token') ? ( // Verifica se o usuário está autenticado
         <>
           <Sider
             collapsed={collapsed}
