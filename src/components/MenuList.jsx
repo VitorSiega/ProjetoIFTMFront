@@ -1,4 +1,4 @@
-import { AppstoreOutlined, AreaChartOutlined, BarsOutlined, HomeOutlined, PayCircleOutlined, SettingOutlined } from '@ant-design/icons';
+import { AppstoreOutlined, AreaChartOutlined, HomeOutlined, PayCircleOutlined, SettingOutlined } from '@ant-design/icons';
 import { Menu } from "antd";
 import React, { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -31,31 +31,14 @@ const MenuList = ({ darkTheme }) => {
 
         },
         {
-            key: 'subtasks',
-            icon: <BarsOutlined />,
-            label: 'Tasks',
-            children: [
-                { key: 'task-1', label: 'Task 1' },
-                { key: 'task-2', label: 'Task 2' },
-                {
-                    key: 'subtask',
-                    label: 'Subtasks',
-                    children: [
-                        { key: 'subtask1', label: 'Subtask 1' },
-                        { key: 'subtask2', label: 'Subtask 2' },
-                    ],
-                },
-            ],
-        },
-        {
-            key: 'progress',
+            key: '/presenca',
             icon: <AreaChartOutlined />,
-            label: 'Progress',
+            label: 'Presença',
         },
         {
-            key: 'payment',
+            key: '/financeiro',
             icon: <PayCircleOutlined />,
-            label: 'Payment',
+            label: 'Financeiro',
         },
         {
             key: 'setting',
