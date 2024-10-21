@@ -26,7 +26,7 @@ const TelaPresenca = () => {
     setLoading(true);
 
     try {
-      const response = await fetch(`http://localhost:8080/api/admin/presenca/listar?buscarPresencaData=${formattedDate}`, {
+      const response = await fetch(`https://api.airsoftcontrol.com.br/api/admin/presenca/listar?buscarPresencaData=${formattedDate}`, {
         method: 'GET',
         headers: {
           "Content-Type": "application/json",
@@ -79,7 +79,7 @@ const TelaPresenca = () => {
     setLoadingDelete(true);
 
     try {
-      const response = await fetch(`http://localhost:8080/api/admin/presenca/remover?data=${formattedDate}`, {
+      const response = await fetch(`https://api.airsoftcontrol.com.br/api/admin/presenca/remover?data=${formattedDate}`, {
         method: 'DELETE',
         headers: {
           "Content-Type": "application/json",
@@ -113,7 +113,7 @@ const TelaPresenca = () => {
     setLoadingSave(true);
 
     try {
-      const response = await fetch(`http://localhost:8080/api/admin/presenca/lancar`, {
+      const response = await fetch(`https://api.airsoftcontrol.com.br/api/admin/presenca/lancar`, {
         method: 'PUT',
         headers: {
           "Content-Type": "application/json",
