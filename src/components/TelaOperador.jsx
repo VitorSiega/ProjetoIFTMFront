@@ -1,6 +1,18 @@
 import { PlusOutlined } from "@ant-design/icons";
-import { Button, Form, Input, Layout, message, Modal, Popconfirm, Select, Space, Table } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Layout,
+  message,
+  Modal,
+  Popconfirm,
+  Select,
+  Space,
+  Table,
+} from "antd";
 import React, { useEffect, useState } from "react";
+import InputMask from "react-input-mask";
 const TelaOperador = () => {
   const [dataSource, setDataSource] = useState([]);
   const [editingUser, setEditingUser] = useState(null);
@@ -29,6 +41,11 @@ const TelaOperador = () => {
     }
   }, [windowWidth]);
 
+  const handleInputChange = (event) => {
+    const { value } = event.target;
+    setTelefone(value); // Atualiza o estado com o valor do campo
+  };
+
   const fetchUsuarios = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -42,7 +59,6 @@ const TelaOperador = () => {
           },
         }
       );
-
 
       if (!response.ok) {
         throw new Error("Erro ao buscar usuários.");
@@ -136,7 +152,7 @@ const TelaOperador = () => {
 
   const editUser = (record) => {
     console.log("Editando usuário:", record); // Verifique o que está sendo passado
-    setEditingUser({ ...record, senha:"" }); // Cria uma nova referência para garantir a atualização correta do estado
+    setEditingUser({ ...record, senha: "" }); // Cria uma nova referência para garantir a atualização correta do estado
     setIsEditing(true);
   };
 
@@ -202,7 +218,7 @@ const TelaOperador = () => {
       dataIndex: "statusOperador",
       key: "statusOperador",
       sorter: (a, b) => a.statusOperador.localeCompare(b.statusOperador),
-      width: 100,
+      width: 110,
     },
     {
       title: "Nome",
@@ -224,7 +240,7 @@ const TelaOperador = () => {
       key: "email",
       sorter: (a, b) => a.email.localeCompare(b.email),
       responsive: ["md"],
-      width: 300,
+      width: 320,
     },
     {
       title: "CPF",
@@ -255,7 +271,7 @@ const TelaOperador = () => {
       dataIndex: "telefoneEmergencia",
       key: "telefoneEmergencia",
       responsive: ["md"],
-      width: 150,
+      width: 160,
     },
     {
       title: "Tipo Sanguíneo",
@@ -291,9 +307,11 @@ const TelaOperador = () => {
           padding: "0 50px",
         }}
       >
-        <h1 style={{ color: "#fff" }}>Tela Operador</h1>
+        <h1 style={{ color: "#fff" }}>Operador</h1>
       </Header>
-      <Content style={{ padding: "0 20px", margin: "20px 0 20px 0", height:'200%' }}>
+      <Content
+        style={{ padding: "0 20px", margin: "20px 0 20px 0", height: "200%" }}
+      >
         <div
           style={{
             background: "#fff",
@@ -327,14 +345,14 @@ const TelaOperador = () => {
                 onChange={onSearchChange}
                 style={{ flex: 1, maxWidth: "300px", marginRight: "16px" }} // Altera a largura para se ajustar ao espaço
               />
-            <Button
-              type="primary"
-              icon={<PlusOutlined />}
-              onClick={createUser}
-              className="button-custom"
-            >
-              {buttonLabel}  {/* Texto do botão atualizado */}
-            </Button>
+              <Button
+                type="primary"
+                icon={<PlusOutlined />}
+                onClick={createUser}
+                className="button-custom"
+              >
+                {buttonLabel} {/* Texto do botão atualizado */}
+              </Button>
             </div>
 
             <Table
@@ -347,7 +365,7 @@ const TelaOperador = () => {
           </div>
         </div>
 
-        <Footer style={{ textAlign: "center", height: "20vh" }}>
+        <Footer style={{ textAlign: "center", height: "10vh" }}>
           Gestão usuários ©2024
         </Footer>
       </Content>
@@ -378,30 +396,36 @@ const TelaOperador = () => {
           >
             <Input />
           </Form.Item>
-          <Form.Item
-            label="Senha"
-            name="senha"
-          >
+          <Form.Item label="Senha" name="senha">
             <Input.Password />
           </Form.Item>
           <Form.Item label="Operador" name="operador">
             <Input type="number" />
           </Form.Item>
+
           <Form.Item
             label="CPF"
             name="cpf"
-            rules={[{ required: true, message: "Por favor insira o CPF!" }]}
+            rules={[{ required: true, message: "Por favor, insira o CPF" }]}
           >
-            <Input />
+            <InputMask mask="999.999.999-99">
+              {(inputProps) => <Input {...inputProps} />}
+            </InputMask>
           </Form.Item>
+
           <Form.Item label="Data de Nascimento" name="dataNascimento">
             <Input type="date" />
           </Form.Item>
+
           <Form.Item label="Telefone" name="telefone">
-            <Input />
+            <InputMask mask="(99)99999-9999" maskChar={null}>
+              {(inputProps) => <Input {...inputProps} />}
+            </InputMask>
           </Form.Item>
           <Form.Item label="Telefone Emergência" name="telefoneEmergencia">
-            <Input />
+            <InputMask mask="(99)99999-9999" maskChar={null}>
+              {(inputProps) => <Input {...inputProps} />}
+            </InputMask>
           </Form.Item>
 
           <Form.Item label="Tipo Sanguíneo" name="tipoSanguineo">
@@ -444,6 +468,8 @@ const TelaOperador = () => {
             <Select>
               <Option value="ATIVO">ATIVO</Option>
               <Option value="INATIVO">INATIVO</Option>
+              <Option value="DESLIGADO">DESLIGADO</Option>
+              <Option value="NÃO ATENDE">NÃO ATENDE</Option>
             </Select>
           </Form.Item>
 

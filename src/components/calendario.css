@@ -1,0 +1,21 @@
+.custom-calendar {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    
+  }
+  
+  .custom-calendar .react-calendar__tile {
+    height: 60px;
+    text-align: center;
+  }
+  
+  .custom-calendar .react-calendar__navigation button {
+    color: black;
+
+  }
+  
+  

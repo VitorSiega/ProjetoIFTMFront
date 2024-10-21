@@ -25,20 +25,20 @@ const MenuList = ({ darkTheme }) => {
             label: <Link to="/TelaHome">Home</Link>,
         },
         {
-            key: '/operador',
+            key: 'operador',
             icon: <AppstoreOutlined />,
             label: <Link to="/TelaOperador">Operador</Link>,
 
         },
         {
-            key: '/presenca',
+            key: 'presenca',
             icon: <AreaChartOutlined />,
-            label: 'Presença',
+            label: <Link to="/TelaPresenca">Presença</Link>,
         },
         {
-            key: '/financeiro',
+            key: 'financeiro',
             icon: <PayCircleOutlined />,
-            label: 'Financeiro',
+            label: <Link to="/TelaFinanceiro">Financeiro</Link>,
         },
         {
             key: 'setting',
