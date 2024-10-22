@@ -1,4 +1,4 @@
-import { Button, Layout, Modal, Select, Spin, Table } from "antd";
+import { Button, Layout, Modal, Popconfirm, Select, Spin, Table } from "antd";
 import React, { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -284,7 +284,7 @@ const TelaPresenca = () => {
       render: (text) => {
         const [year, month, day] = text.split("-");
         const formattedDate = `${day}/${month}/${year}`;
-  
+
         return (
           <Button type="link" onClick={() => fetchPresencasByDate(text)}>
             {formattedDate}
@@ -318,7 +318,7 @@ const TelaPresenca = () => {
       </Header>
 
       <Content
-        style={{  padding: "0 20px", margin: "20px 0 20px 0", height:'200%'}}
+        style={{ padding: "0 20px", margin: "20px 0 20px 0", height: "200%" }}
       >
         <div className="calendario-container">
           <Calendar
@@ -344,14 +344,16 @@ const TelaPresenca = () => {
               <Button key="back" onClick={handleCancel}>
                 Voltar
               </Button>,
-              <Button
-                key="delete"
-                danger
-                loading={loadingDelete}
-                onClick={handleDelete}
+              <Popconfirm
+                title="Tem certeza que deseja excluir todos os registros?"
+                onConfirm={handleDelete}
+                okText="Sim"
+                cancelText="Não"
               >
-                Excluir
-              </Button>,
+                <Button key="delete" danger loading={loadingDelete}>
+                  Excluir
+                </Button>
+              </Popconfirm>,
               <Button
                 key="submit"
                 type="primary"
@@ -380,10 +382,7 @@ const TelaPresenca = () => {
             onOk={() => setIsViewModalVisible(false)}
             onCancel={() => setIsViewModalVisible(false)}
             footer={[
-              <Button
-                key="back"
-                onClick={() => setIsViewModalVisible(false)}
-              >
+              <Button key="back" onClick={() => setIsViewModalVisible(false)}>
                 Fechar
               </Button>,
             ]}
@@ -403,8 +402,8 @@ const TelaPresenca = () => {
       </Content>
 
       <Footer style={{ textAlign: "center", height: "10vh" }}>
-          Gestão usuários ©2024
-        </Footer>
+        Gestão usuários ©2024
+      </Footer>
     </Layout>
   );
 };
