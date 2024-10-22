@@ -158,7 +158,7 @@ const TelaPresenca = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:8080/api/admin/presenca/listar/datas`,
+        `https://api.airsoftcontrol.com.br/api/admin/presenca/listar/datas`,
         {
           method: "GET",
           headers: {
