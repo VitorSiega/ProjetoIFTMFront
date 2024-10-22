@@ -253,6 +253,11 @@ const TelaPresenca = () => {
       title: "Data",
       dataIndex: "data",
       key: "data",
+      width: 125,
+      render: (text) => {
+        const [year, month, day] = text.split("-");
+        return `${day}/${month}/${year}`;
+      },
     },
     {
       title: "Status",
@@ -276,11 +281,16 @@ const TelaPresenca = () => {
       title: "Data",
       dataIndex: "data",
       key: "data",
-      render: (text) => (
-        <Button type="link" onClick={() => fetchPresencasByDate(text)}>
-          {text}
-        </Button>
-      ),
+      render: (text) => {
+        const [year, month, day] = text.split("-");
+        const formattedDate = `${day}/${month}/${year}`;
+  
+        return (
+          <Button type="link" onClick={() => fetchPresencasByDate(text)}>
+            {formattedDate}
+          </Button>
+        );
+      },
     },
   ];
 
