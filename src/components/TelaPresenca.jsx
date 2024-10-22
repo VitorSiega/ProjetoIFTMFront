@@ -1,61 +1,73 @@
-import { Button, Layout, Modal, Select, Spin, Table } from 'antd';
-import React, { useState } from 'react';
-import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css';
-import './calendario.css';
+import { Button, Layout, Modal, Select, Spin, Table } from "antd";
+import React, { useState } from "react";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
+import "./calendario.css";
 
-const { Header, Content, Footer } = Layout; 
+const { Header, Content, Footer } = Layout;
 const { Option } = Select;
 
 const TelaPresenca = () => {
   const [date, setDate] = useState(new Date());
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isViewModalVisible, setIsViewModalVisible] = useState(false);
   const [dataSource, setDataSource] = useState([]);
+  const [dataDates, setDataDates] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [loadingSave, setLoadingSave] = useState(false); 
-  const [loadingDelete, setLoadingDelete] = useState(false); 
+  const [loadingSave, setLoadingSave] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
+  const [buttonLabel, setButtonLabel] = useState("Presenças registradas");
+
+  
 
   const onDateChange = async (newDate) => {
     setDate(newDate);
     setIsModalVisible(true);
     setDataSource([]);
-    
-    const formattedDate = newDate.toISOString().split('T')[0];
-    const token = localStorage.getItem('token');
-    
+
+    const formattedDate = newDate.toISOString().split("T")[0];
+    const token = localStorage.getItem("token");
+
     setLoading(true);
 
     try {
-      const response = await fetch(`https://api.airsoftcontrol.com.br/api/admin/presenca/listar?buscarPresencaData=${formattedDate}`, {
-        method: 'GET',
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `https://api.airsoftcontrol.com.br/api/admin/presenca/listar?buscarPresencaData=${formattedDate}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (!response.ok) {
-        throw new Error('Erro na requisição');
+        throw new Error("Erro na requisição");
       }
 
       const data = await response.json();
       if (!Array.isArray(data) || data.length === 0) {
-        console.error("Nenhum dado encontrado ou dados estão em um formato inesperado.");
+        console.error(
+          "Nenhum dado encontrado ou dados estão em um formato inesperado."
+        );
         return;
       }
 
-      const mappedData = data.map(item => {
-        if (!item.id) {
-          console.error("Item sem id:", item);
-          return null;
-        }
-        return {
-          key: item.id,
-          nome: item.user.nome,
-          data: item.data,
-          status: item.status
-        };
-      }).filter(item => item !== null);
+      const mappedData = data
+        .map((item) => {
+          if (!item.id) {
+            console.error("Item sem id:", item);
+            return null;
+          }
+          return {
+            key: item.id,
+            nome: item.user.nome,
+            data: item.data,
+            status: item.status,
+          };
+        })
+        .filter((item) => item !== null);
 
       setDataSource(mappedData);
     } catch (error) {
@@ -74,26 +86,29 @@ const TelaPresenca = () => {
   };
 
   const handleDelete = async () => {
-    const formattedDate = date.toISOString().split('T')[0]; // Formata a data selecionada
-    const token = localStorage.getItem('token');
+    const formattedDate = date.toISOString().split("T")[0];
+    const token = localStorage.getItem("token");
     setLoadingDelete(true);
 
     try {
-      const response = await fetch(`https://api.airsoftcontrol.com.br/api/admin/presenca/remover?data=${formattedDate}`, {
-        method: 'DELETE',
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        `https://api.airsoftcontrol.com.br/api/admin/presenca/remover?data=${formattedDate}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (!response.ok) {
-        throw new Error('Erro ao excluir registros');
+        throw new Error("Erro ao excluir registros");
       }
 
-      // Atualize o dataSource para remover os registros da data excluída
-      setDataSource(dataSource.filter(item => item.data !== formattedDate));
+      setDataSource(dataSource.filter((item) => item.data !== formattedDate));
       alert("Registros excluídos com sucesso!");
+      handleCancel();
     } catch (error) {
       console.error("Erro ao excluir registros:", error);
       alert("Houve um erro ao excluir os registros.");
@@ -103,27 +118,30 @@ const TelaPresenca = () => {
   };
 
   const handleSave = async () => {
-    const presencaData = dataSource.map(item => ({
+    const presencaData = dataSource.map((item) => ({
       id: item.key,
       status: item.status,
     }));
 
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
 
     setLoadingSave(true);
 
     try {
-      const response = await fetch(`https://api.airsoftcontrol.com.br/api/admin/presenca/lancar`, {
-        method: 'PUT',
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(presencaData),
-      });
+      const response = await fetch(
+        `https://api.airsoftcontrol.com.br/api/admin/presenca/lancar`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(presencaData),
+        }
+      );
 
       if (!response.ok) {
-        throw new Error('Erro ao salvar presença');
+        throw new Error("Erro ao salvar presença");
       }
 
       alert("Dados de presença atualizados com sucesso!");
@@ -136,21 +154,114 @@ const TelaPresenca = () => {
     }
   };
 
+  const handleViewPresencas = async () => {
+    const token = localStorage.getItem("token");
+    setIsViewModalVisible(true);
+    setLoading(true);
+
+    try {
+      const response = await fetch(
+        `http://localhost:8080/api/admin/presenca/listar/datas`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao buscar datas");
+      }
+
+      const data = await response.json();
+
+      const mappedData = data.map((item, index) => ({
+        key: index,
+        data: item, // Apenas a data
+      }));
+
+      setDataDates(mappedData);
+    } catch (error) {
+      console.error("Erro ao buscar datas:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Nova função para buscar presenças de uma data específica
+  const fetchPresencasByDate = async (selectedDate) => {
+    const token = localStorage.getItem("token");
+    setDate(new Date(selectedDate)); // Atualiza a data selecionada
+    setDataSource([]);
+    setLoading(true);
+
+    try {
+      const response = await fetch(
+        `https://api.airsoftcontrol.com.br/api/admin/presenca/listar?buscarPresencaData=${selectedDate}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      
+
+      if (!response.ok) {
+        throw new Error("Erro na requisição");
+      }
+
+      const data = await response.json();
+      if (!Array.isArray(data) || data.length === 0) {
+        console.error(
+          "Nenhum dado encontrado ou dados estão em um formato inesperado."
+        );
+        return;
+      }
+
+      const mappedData = data
+        .map((item) => {
+          if (!item.id) {
+            console.error("Item sem id:", item);
+            return null;
+          }
+          return {
+            key: item.id,
+            nome: item.user.nome,
+            data: item.data,
+            status: item.status,
+          };
+        })
+        .filter((item) => item !== null);
+
+      setDataSource(mappedData);
+      setIsModalVisible(true); // Abre o modal com a tabela
+      setIsViewModalVisible(false);
+    } catch (error) {
+      console.error("Erro ao buscar dados:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const columns = [
     {
-      title: 'Nome',
-      dataIndex: 'nome',
-      key: 'nome',
+      title: "Nome",
+      dataIndex: "nome",
+      key: "nome",
     },
     {
-      title: 'Data',
-      dataIndex: 'data',
-      key: 'data',
+      title: "Data",
+      dataIndex: "data",
+      key: "data",
     },
     {
-      title: 'Status',
-      dataIndex: 'status',
-      key: 'status',
+      title: "Status",
+      dataIndex: "status",
+      key: "status",
       render: (text, record) => (
         <Select
           defaultValue={text}
@@ -160,6 +271,19 @@ const TelaPresenca = () => {
           <Option value="PRESENTE">PRESENTE</Option>
           <Option value="FALTA">FALTA</Option>
         </Select>
+      ),
+    },
+  ];
+
+  const dateColumns = [
+    {
+      title: "Data",
+      dataIndex: "data",
+      key: "data",
+      render: (text) => (
+        <Button type="link" onClick={() => fetchPresencasByDate(text)}>
+          {text}
+        </Button>
       ),
     },
   ];
@@ -176,60 +300,91 @@ const TelaPresenca = () => {
 
   return (
     <Layout>
-      <Header style={{ backgroundColor: '#001529', color: '#fff', textAlign: 'center', padding: '0 50px' }}>
-        <h1 style={{ color: '#fff' }}>Presença</h1>
+      <Header
+        style={{
+          backgroundColor: "#001529",
+          color: "#fff",
+          textAlign: "center",
+          padding: "0 50px",
+        }}
+      >
+        <h1 style={{ color: "#fff" }}>Presença</h1>
       </Header>
 
-      <Content style={{ padding: "0 20px", margin: "20px 0 20px 0", height: '100%' }}>
-        <div className="calendario-container"> 
+      <Content
+        style={{ padding: "0 20px", margin: "20px 0 20px 0", height: "100%" }}
+      >
+        <div className="calendario-container">
           <Calendar
             className="custom-calendar"
             onChange={onDateChange}
             value={date}
           />
+          <div style={{ marginTop: "20px", textAlign: "center" }}>
+            <Button
+              type="primary"
+              onClick={handleViewPresencas}
+              style={{ marginTop: "20px" }}
+            >
+              Ver presenças registradas
+            </Button>
+          </div>
         </div>
       </Content>
 
-      <Modal 
-        title="Data Selecionada"
-        open={isModalVisible} 
-        onOk={handleOk} 
+      <Footer style={{ textAlign: "center" }}>Gestão usuários ©2024</Footer>
+
+      <Modal
+        title="Lista de Presenças"
+        open={isModalVisible}
+        onOk={handleOk}
         onCancel={handleCancel}
         footer={[
-          <Button 
-            key="delete" 
-            type="primary" 
-            danger 
-            onClick={handleDelete} 
-            disabled={loadingDelete} 
-          >
-            {loadingDelete ? <Spin size="small" /> : 'Excluir'}
-          </Button>,
           <Button key="back" onClick={handleCancel}>
-            Cancelar
+            Voltar
           </Button>,
-          <Button key="submit" type="primary" onClick={handleSave} disabled={loadingSave}>
-            {loadingSave ? <Spin size="small" /> : 'SALVAR'}
+          <Button
+            key="delete"
+            loading={loadingDelete}
+            onClick={handleDelete}
+            style={{ backgroundColor: "#ff4d4f", color: "#fff" }}
+          >
+            Excluir
+          </Button>,
+          <Button
+            key="submit"
+            type="primary"
+            loading={loadingSave}
+            onClick={handleSave}
+          >
+            Salvar
           </Button>,
         ]}
       >
-        <p>Você selecionou a data: {date.toDateString()}</p>
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '20px' }}>
-            <Spin tip="Buscando dados..." />
-          </div>
+          <Spin />
         ) : (
-          <Table 
-            dataSource={dataSource} 
-            columns={columns} 
-            pagination={false}
-          />
+          <Table dataSource={dataSource} columns={columns} pagination={false} />
         )}
       </Modal>
 
-      <Footer style={{ paddingTop: '35px', textAlign: "center", height: "10vh" }}>
-        Ant Design ©2024 Created by You
-      </Footer>
+      <Modal
+        title="Datas de Presença"
+        open={isViewModalVisible}
+        onOk={() => setIsViewModalVisible(false)}
+        onCancel={() => setIsViewModalVisible(false)}
+        footer={[
+          <Button key="back" onClick={() => setIsViewModalVisible(false)}>
+            Fechar
+          </Button>,
+        ]}
+      >
+        {loading ? (
+          <Spin />
+        ) : (
+          <Table dataSource={dataDates} columns={dateColumns} />
+        )}
+      </Modal>
     </Layout>
   );
 };
