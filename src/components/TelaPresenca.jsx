@@ -16,9 +16,6 @@ const TelaPresenca = () => {
   const [loading, setLoading] = useState(false);
   const [loadingSave, setLoadingSave] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
-  const [buttonLabel, setButtonLabel] = useState("Presenças registradas");
-
-  
 
   const onDateChange = async (newDate) => {
     setDate(newDate);
@@ -208,7 +205,6 @@ const TelaPresenca = () => {
           },
         }
       );
-      
 
       if (!response.ok) {
         throw new Error("Erro na requisição");
@@ -312,7 +308,7 @@ const TelaPresenca = () => {
       </Header>
 
       <Content
-        style={{ padding: "0 20px", margin: "20px 0 20px 0", height: "100%" }}
+        style={{  padding: "0 20px", margin: "20px 0 20px 0", height:'200%'}}
       >
         <div className="calendario-container">
           <Calendar
@@ -324,67 +320,81 @@ const TelaPresenca = () => {
             <Button
               type="primary"
               onClick={handleViewPresencas}
-              style={{ marginTop: "20px" }}
+              loading={loading}
             >
-              Ver presenças registradas
+              Presenças
             </Button>
           </div>
+          <Modal
+            title="Registro de Presença"
+            open={isModalVisible}
+            onOk={handleOk}
+            onCancel={handleCancel}
+            footer={[
+              <Button key="back" onClick={handleCancel}>
+                Voltar
+              </Button>,
+              <Button
+                key="delete"
+                danger
+                loading={loadingDelete}
+                onClick={handleDelete}
+              >
+                Excluir
+              </Button>,
+              <Button
+                key="submit"
+                type="primary"
+                loading={loadingSave}
+                onClick={handleSave}
+              >
+                Salvar
+              </Button>,
+            ]}
+          >
+            {loading ? (
+              <Spin />
+            ) : (
+              <Table
+                columns={columns}
+                dataSource={dataSource}
+                pagination={false}
+                loading={loading}
+              />
+            )}
+          </Modal>
+
+          <Modal
+            title="Presenças Registradas"
+            open={isViewModalVisible}
+            onOk={() => setIsViewModalVisible(false)}
+            onCancel={() => setIsViewModalVisible(false)}
+            footer={[
+              <Button
+                key="back"
+                onClick={() => setIsViewModalVisible(false)}
+              >
+                Fechar
+              </Button>,
+            ]}
+          >
+            {loading ? (
+              <Spin />
+            ) : (
+              <Table
+                columns={dateColumns}
+                dataSource={dataDates}
+                pagination={false}
+                loading={loading}
+              />
+            )}
+          </Modal>
         </div>
       </Content>
 
-      <Footer style={{ textAlign: "center" }}>Gestão usuários ©2024</Footer>
-
-      <Modal
-        title="Lista de Presenças"
-        open={isModalVisible}
-        onOk={handleOk}
-        onCancel={handleCancel}
-        footer={[
-          <Button key="back" onClick={handleCancel}>
-            Voltar
-          </Button>,
-          <Button
-            key="delete"
-            loading={loadingDelete}
-            onClick={handleDelete}
-            style={{ backgroundColor: "#ff4d4f", color: "#fff" }}
-          >
-            Excluir
-          </Button>,
-          <Button
-            key="submit"
-            type="primary"
-            loading={loadingSave}
-            onClick={handleSave}
-          >
-            Salvar
-          </Button>,
-        ]}
-      >
-        {loading ? (
-          <Spin />
-        ) : (
-          <Table dataSource={dataSource} columns={columns} pagination={false} />
-        )}
-      </Modal>
-
-      <Modal
-        title="Datas de Presença"
-        open={isViewModalVisible}
-        onOk={() => setIsViewModalVisible(false)}
-        onCancel={() => setIsViewModalVisible(false)}
-        footer={[
-          <Button key="back" onClick={() => setIsViewModalVisible(false)}>
-            Fechar
-          </Button>,
-        ]}
-      >
-        {loading ? (
-          <Spin />
-        ) : (
-          <Table dataSource={dataDates} columns={dateColumns} />
-        )}
-      </Modal>
+      <Footer style={{ textAlign: "center", height: "10vh" }}>
+          Gestão usuários ©2024
+        </Footer>
     </Layout>
   );
 };
