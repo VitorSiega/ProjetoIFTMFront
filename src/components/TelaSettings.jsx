@@ -48,46 +48,33 @@ const TelaSettings = () => {
 
   const updateUser = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const url = `https://api.airsoftcontrol.com.br/api/admin/atualizar/${editingUser.id}`;
+        const token = localStorage.getItem("token");
+        const url = `https://api.airsoftcontrol.com.br/api/admin/atualizar/${editingUser.id}`;
 
-      const userData = {
-        ...editingUser,
-        operador: Number(editingUser.operador),
-      };
+        const userData = {
+            ...editingUser,
+            operador: Number(editingUser.operador),//mexer aqui
+            senha: editingUser.senha ? editingUser.senha : "", // Enviar senha vazia se não digitada
+        };
 
-      const response = await fetch(url, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(userData),
-      });
+        const response = await fetch(url, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(userData),
+        });
 
-      if (!response.ok) {
-        // Verifique se o token expirou ou se há outro erro
-        if (response.status === 401) {
-          message.error("Sessão expirada. Por favor, faça login novamente.");
-          localStorage.removeItem("token");
-          localStorage.removeItem("email");
-          // Redirecionar para a página de login
-          window.location.href = "/login"; // Atualize a URL conforme necessário
-          return;
-        }
-        const result = await response.text();
-        throw new Error(result || "Erro ao atualizar usuário.");
-      }
+        localStorage.setItem("email", editingUser.email);
+        message.success("Usuário atualizado com sucesso!");
 
-      localStorage.setItem("email", editingUser.email);
-      message.success("Usuário atualizado com sucesso!");
-
-      setIsEditing(false);
-      fetchProfileData(); // Atualiza os dados do perfil
+        setIsEditing(false);
+        fetchProfileData(); // Atualiza os dados do perfil
     } catch (error) {
-      message.error("Erro ao atualizar usuário: " + error.message);
+        message.error("Erro ao atualizar usuário: " + error.message);
     }
-  };
+};
 
   const toggleEdit = () => {
     if (isEditing) {
