@@ -4,6 +4,7 @@ import TelaHome from './components/TelaHome'; // Importa a tela home
 import Login from './components/TelaLogin/Login'; // Importa seu componente de login
 import TelaOperador from './components/TelaOperador';
 import TelaPresenca from './components/TelaPresenca';
+import TelaSettings from './components/TelaSettings';
 
 const AppRoutes = () => {
   return (
@@ -13,6 +14,7 @@ const AppRoutes = () => {
       <Route path="/TelaOperador" element={<TelaOperador />} />
       <Route path="/TelaPresenca" element={<TelaPresenca />} />
       <Route path="/TelaFinanceiro" element={<TelaFinanceiro />} />
+      <Route path="/TelaSettings" element={<TelaSettings />} />
       {/* Rota catch-all para redirecionar para TelaHome se a rota não existir */}
       <Route path="*" element={<Navigate to="/TelaHome" replace />} />
     </Routes>

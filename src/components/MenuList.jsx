@@ -22,7 +22,7 @@ const MenuList = ({ darkTheme }) => {
         { key: 'operador', icon: <AppstoreOutlined />, label: <Link to="/TelaOperador">Operador</Link> },
         { key: 'presenca', icon: <AreaChartOutlined />, label: <Link to="/TelaPresenca">Presença</Link> },
         { key: 'financeiro', icon: <PayCircleOutlined />, label: <Link to="/TelaFinanceiro">Financeiro</Link> },
-        { key: 'setting', icon: <SettingOutlined />, label: 'Settings' },
+        { key: 'setting', icon: <SettingOutlined />, label: <Link to="/TelaSettings">Perfil</Link> },
     ];
 
     if (loading) {

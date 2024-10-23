@@ -10,10 +10,10 @@ function Login() {
   const [errors, setErrors] = useState({});
   const [isLoaded, setIsLoaded] = useState(false);
   const [theme, setTheme] = useState("dark-mode");
-  const [loading, setLoading] = useState(false); 
-  const [loginError, setLoginError] = useState(""); 
+  const [loading, setLoading] = useState(false);
+  const [loginError, setLoginError] = useState("");
 
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
   // Verifique se o usuário já está autenticado
   useEffect(() => {
@@ -23,8 +23,8 @@ function Login() {
     }
     setTimeout(() => {
       setIsLoaded(true);
-    }, 100); 
-    document.body.className = theme; 
+    }, 100);
+    document.body.className = theme;
   }, [theme, navigate]);
 
   const validate = () => {
@@ -53,25 +53,27 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoginError(""); 
+    setLoginError("");
     if (validate()) {
-      setLoading(true); 
+      setLoading(true);
       try {
         const response = await fetch("https://api.airsoftcontrol.com.br/api/user/login", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            email,
-            senha: password, 
-          }),
-        });
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email,
+              senha: password,
+            }),
+          }
+        );
 
         if (response.ok) {
           const data = await response.json();
           message.success("Login realizado com sucesso!");
-          localStorage.setItem("token", data.token);
+          localStorage.setItem("token", data.tokenDTO.token);
+          localStorage.setItem("email", data.idUsuario);        
           navigate("/TelaHome"); // Redireciona para a página home após o login
         } else if (response.status === 401) {
           const errorData = await response.json();
@@ -83,7 +85,7 @@ function Login() {
       } catch (error) {
         setLoginError("Falha ao conectar ao servidor");
       } finally {
-        setLoading(false); 
+        setLoading(false);
       }
     }
   };
@@ -138,7 +140,7 @@ function Login() {
             <label htmlFor="rememberMe">Relembrar login e senha</label>
           </div>
 
-          {loginError && <p className="error">{loginError}</p>} 
+          {loginError && <p className="error">{loginError}</p>}
 
           <button type="submit" className="login-button" disabled={loading}>
             {loading ? "Carregando..." : "Login"}
