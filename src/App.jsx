@@ -14,7 +14,7 @@ const isAuthenticated = () => {
 
 async function validateToken(token) {
   // Faça uma chamada para a API para validar o token
-  const response = await fetch('/api/token/verify', {
+  const response = await fetch('https://api.airsoftcontrol.com.br/api/token/verify', {
     method: 'GET', // Use GET para verificar o token
     headers: {
       'Authorization': `Bearer ${token}`,

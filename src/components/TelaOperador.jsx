@@ -2,6 +2,7 @@ import { PlusOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Layout, message, Modal, Popconfirm, Select, Space, Table, } from "antd";
 import React, { useEffect, useState } from "react";
 import InputMask from "react-input-mask";
+
 const TelaOperador = () => {
   const [dataSource, setDataSource] = useState([]);
   const [editingUser, setEditingUser] = useState(null);
@@ -62,8 +63,7 @@ const TelaOperador = () => {
         }))
       );
     } catch (error) {
-      console.error("Erro ao buscar usuários:", error);
-      message.error("Erro ao carregar usuários.");
+      message.error("Usuário não autenticado!");
     }
   };
 
@@ -109,8 +109,6 @@ const TelaOperador = () => {
         operador: Number(values.operador),
       };
 
-      console.log("Dados enviados:", userData);
-
       const response = await fetch(url, {
         method,
         headers: {
@@ -134,7 +132,7 @@ const TelaOperador = () => {
       setIsEditing(false);
       fetchUsuarios();
     } catch (error) {
-      message.error(error.message || "Erro ao salvar usuário.");
+      message.error("Usuário não autenticado");
     }
   };
 

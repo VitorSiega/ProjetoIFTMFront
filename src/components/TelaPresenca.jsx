@@ -68,7 +68,7 @@ const TelaPresenca = () => {
 
       setDataSource(mappedData);
     } catch (error) {
-      console.error("Erro ao buscar dados:", error);
+      message.error("Usuário não autenticado")
     } finally {
       setLoading(false);
     }
@@ -107,9 +107,7 @@ const TelaPresenca = () => {
       setDataSource(dataSource.filter((item) => item.data !== formattedDate));
       handleCancel();
     } catch (error) {
-      console.error("Erro ao excluir registros:", error);
-      message.success("Registros excluídos com sucesso!");
-      alert("Houve um erro ao excluir os registros.");
+      message.error("Houve um erro ao excluir os registros.");
     } finally {
       setLoadingDelete(false);
     }
@@ -142,11 +140,10 @@ const TelaPresenca = () => {
         throw new Error("Erro ao salvar presença");
       }
 
-      alert("Dados de presença atualizados com sucesso!");
+      message.success("Dados de presença atualizados com sucesso!");
       handleOk();
     } catch (error) {
-      console.error("Erro ao registrar presença:", error);
-      alert("Houve um erro ao atualizar os dados.");
+      message.error("Houve um erro ao atualizar os dados.");
     } finally {
       setLoadingSave(false);
     }
@@ -182,7 +179,7 @@ const TelaPresenca = () => {
 
       setDataDates(mappedData);
     } catch (error) {
-      console.error("Erro ao buscar datas:", error);
+      message.error("Usuário não autenticado")
     } finally {
       setLoading(false);
     }
@@ -238,7 +235,7 @@ const TelaPresenca = () => {
       setIsModalVisible(true); // Abre o modal com a tabela
       setIsViewModalVisible(false);
     } catch (error) {
-      console.error("Erro ao buscar dados:", error);
+      message.error("Usuário não autenticado")
     } finally {
       setLoading(false);
     }
@@ -394,7 +391,7 @@ const TelaPresenca = () => {
               <Table
                 columns={dateColumns}
                 dataSource={dataDates}
-                pagination={false}
+                pagination={{ pageSize: 10 }}
                 loading={loading}
               />
             )}

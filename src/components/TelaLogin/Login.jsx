@@ -1,8 +1,8 @@
+import { message } from "antd";
 import React, { useEffect, useState } from "react";
 import { FaMoon, FaSun } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import "./Login.css"; // Arquivo de estilo
-
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -70,7 +70,7 @@ function Login() {
 
         if (response.ok) {
           const data = await response.json();
-          alert("Login realizado com sucesso!");
+          message.success("Login realizado com sucesso!");
           localStorage.setItem("token", data.token);
           navigate("/TelaHome"); // Redireciona para a página home após o login
         } else if (response.status === 401) {
