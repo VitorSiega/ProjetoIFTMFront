@@ -1,4 +1,4 @@
-import { Button, Layout, Modal, Select, Spin, Table } from "antd";
+import { Button, Layout, Modal, Select, Spin, Table, message } from "antd";
 import React, { useState } from "react";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
@@ -103,11 +103,12 @@ const TelaPresenca = () => {
         throw new Error("Erro ao excluir registros");
       }
 
+      message.success("Registros excluidos com sucesso");
       setDataSource(dataSource.filter((item) => item.data !== formattedDate));
-      alert("Registros excluídos com sucesso!");
       handleCancel();
     } catch (error) {
       console.error("Erro ao excluir registros:", error);
+      message.success("Registros excluídos com sucesso!");
       alert("Houve um erro ao excluir os registros.");
     } finally {
       setLoadingDelete(false);

@@ -1,16 +1,5 @@
 import { PlusOutlined } from "@ant-design/icons";
-import {
-  Button,
-  Form,
-  Input,
-  Layout,
-  message,
-  Modal,
-  Popconfirm,
-  Select,
-  Space,
-  Table,
-} from "antd";
+import { Button, Form, Input, Layout, message, Modal, Popconfirm, Select, Space, Table, } from "antd";
 import React, { useEffect, useState } from "react";
 import InputMask from "react-input-mask";
 const TelaOperador = () => {
@@ -145,13 +134,11 @@ const TelaOperador = () => {
       setIsEditing(false);
       fetchUsuarios();
     } catch (error) {
-      console.error(error);
       message.error(error.message || "Erro ao salvar usuário.");
     }
   };
 
   const editUser = (record) => {
-    console.log("Editando usuário:", record); // Verifique o que está sendo passado
     setEditingUser({ ...record, senha: "" }); // Cria uma nova referência para garantir a atualização correta do estado
     setIsEditing(true);
   };
