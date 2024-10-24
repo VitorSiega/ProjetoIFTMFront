@@ -13,11 +13,11 @@ const TelaSettings = () => {
   const editingUser = profile;
   const token = localStorage.getItem("token");
   // Função para buscar os dados do perfil
+  const id = localStorage.getItem("id");
   const fetchProfileData = async () => {
     try {
-      const email = localStorage.getItem("email");
       const response = await fetch(
-        `https://api.airsoftcontrol.com.br/api/user/listar?email=${email}`
+        `http://localhost:8080/api/user/listar?usuario=${id}`
       );
       if (!response.ok) {
         throw new Error("Erro ao buscar dados do usuário");
@@ -48,32 +48,36 @@ const TelaSettings = () => {
 
   const updateUser = async () => {
     try {
-        const token = localStorage.getItem("token");
-        const url = `https://api.airsoftcontrol.com.br/api/admin/atualizar/${editingUser.id}`;
+      const token = localStorage.getItem("token");
+      const url = `http://localhost:8080/api/admin/atualizar/${id}`;
 
-        const userData = {
-            ...editingUser,
-            operador: Number(editingUser.operador),//mexer aqui
-            senha: editingUser.senha ? editingUser.senha : "", // Enviar senha vazia se não digitada
-        };
+      // Cria uma cópia do objeto do usuário
+      const userData = {
+        ...editingUser,
+        operador: Number(editingUser.operador),
+      };
 
-        const response = await fetch(url, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${token}`,
-            },
-            body: JSON.stringify(userData),
-        });
+      console.log(userData);
+      const response = await fetch(url, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(userData),
+      });
 
-        message.success("Usuário atualizado com sucesso!");
+      if (!response.ok) {
+        throw new Error("Erro ao atualizar usuário");
+      }
 
-        setIsEditing(false);
-        fetchProfileData(); // Atualiza os dados do perfil
+      message.success("Usuário atualizado com sucesso!");
+      setIsEditing(false);
+      fetchProfileData(); // Atualiza os dados do perfil
     } catch (error) {
-        message.error("Erro ao atualizar usuário: " + error.message);
+      message.error("Erro ao atualizar usuário: " + error.message);
     }
-};
+  };
 
   const toggleEdit = () => {
     if (isEditing) {
@@ -124,7 +128,19 @@ const TelaSettings = () => {
             {isEditing ? (
               <Input name="nome" value={profile.nome} onChange={handleChange} />
             ) : (
-              <Text>{profile.nome}</Text>
+              <Text> {profile.nome}</Text>
+            )}
+          </Card>
+          <Card style={{ marginBottom: "20px" }}>
+            <Text strong>Operador:</Text>
+            {isEditing ? (
+              <Input
+                name="operador"
+                value={profile.operador}
+                onChange={handleChange}
+              />
+            ) : (
+              <Text> {profile.operador}</Text>
             )}
           </Card>
           <Card style={{ marginBottom: "20px" }}>
@@ -136,7 +152,7 @@ const TelaSettings = () => {
                 onChange={handleChange}
               />
             ) : (
-              <Text>{profile.email}</Text>
+              <Text> {profile.email}</Text>
             )}
           </Card>
           <Card style={{ marginBottom: "20px" }}>
@@ -144,11 +160,16 @@ const TelaSettings = () => {
             {isEditing ? (
               <Input.Password name="senha" onChange={handleChange} />
             ) : (
-              <Text></Text> // Exibir asteriscos quando não estiver em edição
+              <Text></Text> // Não exibir a senha
             )}
           </Card>
           <Card style={{ marginBottom: "20px" }}>
-            <Text strong>CPF:</Text> <Text>{profile.cpf}</Text>
+            <Text strong>cpf:</Text>
+            {isEditing ? (
+              <Input name="cpf" value={profile.cpf} onChange={handleChange} />
+            ) : (
+              <Text> {profile.cpf}</Text>
+            )}
           </Card>
           <Card style={{ marginBottom: "20px" }}>
             <Text strong>Data de Nascimento:</Text>
@@ -160,7 +181,7 @@ const TelaSettings = () => {
                 onChange={handleChange}
               />
             ) : (
-              <Text>{formatDate(profile.dataNascimento)}</Text> // Formata a data aqui
+              <Text> {formatDate(profile.dataNascimento)}</Text> // Formata a data aqui
             )}
           </Card>
           <Card style={{ marginBottom: "20px" }}>
@@ -176,7 +197,7 @@ const TelaSettings = () => {
                 {(inputProps) => <Input {...inputProps} />}
               </InputMask>
             ) : (
-              <Text>{profile.telefone}</Text>
+              <Text> {profile.telefone}</Text>
             )}
           </Card>
           <Card style={{ marginBottom: "20px" }}>
@@ -192,7 +213,7 @@ const TelaSettings = () => {
                 {(inputProps) => <Input {...inputProps} />}
               </InputMask>
             ) : (
-              <Text>{profile.telefoneEmergencia}</Text>
+              <Text> {profile.telefoneEmergencia}</Text>
             )}
           </Card>
           <Card style={{ marginBottom: "20px" }}>
@@ -213,7 +234,7 @@ const TelaSettings = () => {
                 <Option value="O-">O-</Option>
               </Select>
             ) : (
-              <Text>{profile.tipoSanguineo}</Text>
+              <Text> {profile.tipoSanguineo}</Text>
             )}
           </Card>
           <Card style={{ marginBottom: "20px" }}>
@@ -225,15 +246,15 @@ const TelaSettings = () => {
                 onChange={handleChange}
               />
             ) : (
-              <Text>{profile.ocupacao}</Text>
+              <Text> {profile.ocupacao}</Text>
             )}
           </Card>
           <Card style={{ marginBottom: "20px" }}>
             <Text strong>Status do Operador:</Text>{" "}
-            <Text>{profile.statusOperador}</Text>
+            <Text> {profile.statusOperador}</Text>
           </Card>
           <Card style={{ marginBottom: "20px" }}>
-            <Text strong>Role:</Text> <Text>{profile.role}</Text>
+            <Text strong>Role:</Text> <Text> {profile.role}</Text>
           </Card>
 
           <Button type="primary" onClick={toggleEdit}>

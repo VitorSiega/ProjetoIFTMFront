@@ -71,8 +71,9 @@ function Login() {
         if (response.ok) {
           const data = await response.json();
           message.success("Login realizado com sucesso!");
-          localStorage.setItem("token", data.token);
-          console.log(data.token)
+          localStorage.setItem("token", data.tokenDTO.token);
+          localStorage.setItem("id", data.idUsuario);
+
           navigate("/TelaHome"); // Redireciona para a página home após o login
         } else if (response.status === 401) {
           const errorData = await response.json();
