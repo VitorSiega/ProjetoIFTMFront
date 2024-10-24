@@ -12,18 +12,29 @@ const isAuthenticated = () => {
   return !!localStorage.getItem('token');
 };
 
+const token = localStorage.getItem("token");
+
 async function validateToken(token) {
-  // Faça uma chamada para a API para validar o token
   const response = await fetch('https://api.airsoftcontrol.com.br/api/token/verify', {
-    method: 'GET', // Use GET para verificar o token
-    headers: {
-      'Authorization': `Bearer ${token}`,
-    },
+      method: 'POST',
+      headers: {
+          'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ token }), // Enviando o token no corpo
   });
 
-  // A resposta estará ok se o token for válido
-  return response.ok;
+  if (response.ok) {
+      const responseData = await response.text();
+      console.log("Token válido: ", responseData);
+      return true;
+  } else {
+      const errorMessage = await response.text();
+      console.error("Erro ao validar o token: ", errorMessage);
+      return false;
+  }
 }
+
+
 function App() {
   const [darkTheme, setDarkTheme] = useState(true);
   const [collapsed, setCollapsed] = useState(false);

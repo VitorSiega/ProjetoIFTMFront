@@ -66,7 +66,6 @@ const TelaSettings = () => {
             body: JSON.stringify(userData),
         });
 
-        localStorage.setItem("email", editingUser.email);
         message.success("Usuário atualizado com sucesso!");
 
         setIsEditing(false);
