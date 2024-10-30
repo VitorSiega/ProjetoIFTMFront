@@ -32,4 +32,4 @@ const TelaGames = () => {
   );
 };
 
-export default Telagames;
+export default TelaGames;
