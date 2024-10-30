@@ -17,7 +17,7 @@ const TelaSettings = () => {
   const fetchProfileData = async () => {
     try {
       const response = await fetch(
-        `http://localhost:8080/api/user/listar?usuario=${id}`
+        `https://api.airsoftcontrol.com.br/api/user/listar?usuario=${id}`
       );
       if (!response.ok) {
         throw new Error("Erro ao buscar dados do usuário");
@@ -49,7 +49,7 @@ const TelaSettings = () => {
   const updateUser = async () => {
     try {
       const token = localStorage.getItem("token");
-      const url = `http://localhost:8080/api/admin/atualizar/${id}`;
+      const url = `https://api.airsoftcontrol.com.br/api/admin/atualizar/${id}`;
 
       // Cria uma cópia do objeto do usuário
       const userData = {
