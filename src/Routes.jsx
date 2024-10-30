@@ -1,5 +1,6 @@
 import { Navigate, Route, Routes } from 'react-router-dom'; // Importa Navigate para redirecionamento
 import TelaFinanceiro from './components/TelaFinanceiro';
+import TelaGames from './components/TelaGames';
 import TelaHome from './components/TelaHome'; // Importa a tela home
 import Login from './components/TelaLogin/Login'; // Importa seu componente de login
 import TelaOperador from './components/TelaOperador';
@@ -15,6 +16,7 @@ const AppRoutes = () => {
       <Route path="/TelaPresenca" element={<TelaPresenca />} />
       <Route path="/TelaFinanceiro" element={<TelaFinanceiro />} />
       <Route path="/TelaSettings" element={<TelaSettings />} />
+      <Route path="/TelaGames" element={<TelaGames />} />
       {/* Rota catch-all para redirecionar para TelaHome se a rota não existir */}
       <Route path="*" element={<Navigate to="/TelaHome" replace />} />
     </Routes>
