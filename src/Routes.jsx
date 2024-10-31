@@ -4,7 +4,7 @@ import TelaGames from './components/TelaGames/TelaGames';
 import TelaHome from './components/TelaHome'; // Importa a tela home
 import Login from './components/TelaLogin/Login'; // Importa seu componente de login
 import TelaOperador from './components/TelaOperador';
-import TelaPresenca from './components/TelaPresenca';
+import TelaPresenca from './components/TelaPresenca/TelaPresenca';
 import TelaSettings from './components/TelaSettings/TelaSettings';
 
 const AppRoutes = () => {
