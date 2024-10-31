@@ -1,11 +1,11 @@
 import { Navigate, Route, Routes } from 'react-router-dom'; // Importa Navigate para redirecionamento
 import TelaFinanceiro from './components/TelaFinanceiro';
-import TelaGames from './components/TelaGames';
+import TelaGames from './components/TelaGames/TelaGames';
 import TelaHome from './components/TelaHome'; // Importa a tela home
 import Login from './components/TelaLogin/Login'; // Importa seu componente de login
 import TelaOperador from './components/TelaOperador';
 import TelaPresenca from './components/TelaPresenca';
-import TelaSettings from './components/TelaSettings';
+import TelaSettings from './components/TelaSettings/TelaSettings';
 
 const AppRoutes = () => {
   return (

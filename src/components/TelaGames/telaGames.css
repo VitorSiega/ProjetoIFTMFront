@@ -1,0 +1,71 @@
+/* Estilos gerais */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+    margin: 0;
+    padding: 0;
+  }
+  
+  h1 {
+    margin: 0;
+  }
+  
+  /* Container do calendário */
+  .calendario-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Estilo do calendário */
+  .custom-calendar {
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    margin-bottom: 20px;
+  }
+  
+  /* Estilos do botão */
+  .ant-btn {
+    margin: 5px;
+  }
+  
+  /* Estilos do modal */
+  .ant-modal-header {
+    background-color: #001529;
+    color: #fff;
+  }
+  
+  .ant-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .ant-modal-body {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    margin: 8px 0 4px;
+    font-weight: bold;
+  }
+  
+  /* Estilo dos inputs */
+  input[type="text"] {
+    padding: 8px;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  /* Estilo do Select */
+  .ant-select {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  

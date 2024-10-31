@@ -1,0 +1,69 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+  }
+  
+  .layout-header {
+    background-color: #001529;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .layout-content {
+    padding: 20px;
+    margin: 20px auto;
+    background: #f5f5f5;
+    border-radius: 8px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    flex-grow: 1;
+    overflow-y: auto;
+  }
+  
+  .profile-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px; /* Espaçamento entre cartões */
+  }
+  
+  .card {
+    flex: 1 1 calc(50% - 10px); /* Responsivo, ocupando metade da largura com espaço */
+    background: #fff;
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    transition: transform 0.2s;
+  }
+  
+  .card:hover {
+    transform: scale(1.02); /* Efeito de zoom ao passar o mouse */
+  }
+  
+  .card-title {
+    font-weight: bold;
+    margin-bottom: 5px; /* Espaço entre título e conteúdo */
+  }
+  
+  input, .ant-select-selector {
+    width: 100%; /* Largura total dos campos */
+  }
+  
+  .button-group {
+    margin-top: 20px; /* Espaçamento acima dos botões */
+  }
+  
+  .save-button {
+    margin-left: 10px; /* Espaçamento entre botões */
+  }
+  
+  .footer {
+    text-align: center;
+    padding: 20px 0;
+    background-color: #f0f0f0;
+    border-top: 1px solid #e0e0e0;
+  }
+  
