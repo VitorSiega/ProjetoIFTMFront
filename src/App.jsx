@@ -25,7 +25,6 @@ async function validateToken(token) {
 
   if (response.ok) {
       const responseData = await response.text();
-      console.log("Token válido: ", responseData);
       return true;
   } else {
       const errorMessage = await response.text();

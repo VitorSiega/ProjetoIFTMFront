@@ -1,5 +1,6 @@
 import { LeftOutlined, RightOutlined } from '@ant-design/icons';
-import { Button, Col, Input, Layout, message, Row, Select, Table, Typography } from 'antd';
+import { Button, Col, DatePicker, Input, Layout, message, Row, Select, Table, Typography } from 'antd';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 
 const { Header, Content, Footer } = Layout;
@@ -8,7 +9,7 @@ const { Option } = Select;
 const TelaFinanceiro = () => {
   const [date, setDate] = useState(new Date());
   const [transactionData, setTransactionData] = useState([]);
-  const token = localStorage.getItem('token'); // Ou obtenha o token de onde ele está armazenado
+  const token = localStorage.getItem('token'); // Obtém o token armazenado
 
   // Função para mudar o mês
   const changeMonth = (increment) => {
@@ -41,8 +42,9 @@ const TelaFinanceiro = () => {
 
       // Extrair e formatar os dados recebidos
       const formattedData = data.map((item) => ({
-        key: item.id, // Chave única para cada item
+        key: item.id,
         nome: item.user.nome,
+        diaPago: item.diaPago ? moment(item.diaPago) : null, // Converte diaPago para momento
         valorPago: item.valorPago || 15.00,
         status: item.status || "NÃO PAGO",
       }));
@@ -67,6 +69,15 @@ const TelaFinanceiro = () => {
     );
   };
 
+  // Função para alterar o dia do pagamento
+  const handleDayChange = (key, newDay) => {
+    setTransactionData((prevData) =>
+      prevData.map((transaction) =>
+        transaction.key === key ? { ...transaction, diaPago: newDay } : transaction
+      )
+    );
+  };
+
   // Função para alterar o status da transação
   const handleStatusChange = (key, newStatus) => {
     setTransactionData((prevData) =>
@@ -78,9 +89,10 @@ const TelaFinanceiro = () => {
 
   // Função para enviar dados atualizados ao servidor
   const updateTransactionData = async () => {
-    const dataToUpdate = transactionData.map(({ key, valorPago, status }) => ({
-      id: key, // Presumindo que 'key' é o identificador único
+    const dataToUpdate = transactionData.map(({ key, valorPago, diaPago, status }) => ({
+      id: key,
       valorPago,
+      dia_pago: diaPago ? diaPago.format('YYYY-MM-DD') : null, // Converte o diaPago para string no formato esperado
       status,
     }));
 
@@ -91,7 +103,7 @@ const TelaFinanceiro = () => {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`,
         },
-        body: JSON.stringify(dataToUpdate), // Enviar apenas os dados principais
+        body: JSON.stringify(dataToUpdate),
       });
 
       if (!response.ok) throw new Error('Erro ao atualizar dados');
@@ -108,20 +120,34 @@ const TelaFinanceiro = () => {
       title: 'Nome',
       dataIndex: 'nome',
       key: 'nome',
-      width: '30%', // Usando porcentagens para responsividade
+      width: '30%',
+    },
+    {
+      title: 'Dia Pago',
+      dataIndex: 'diaPago',
+      key: 'diaPago',
+      width: '10%',
+      render: (text, record) => (
+        <DatePicker
+          value={record.diaPago}
+          format="DD-MM-YYYY"
+          onChange={(date) => handleDayChange(record.key, date)}
+          style={{ width: '100%', minWidth: '120px'}}
+        />
+      ),
     },
     {
       title: 'Valor Pago',
       dataIndex: 'valorPago',
       key: 'valorPago',
-      width: '30%',
+      width: '20%',
       render: (text, record) => (
         <Input
           type="number"
-          value={text}
+          value={record.valorPago}
           onChange={(e) => handleAmountChange(record.key, e.target.value)}
           prefix="R$"
-          style={{ width: '100%', minWidth: '100px' }} // Ajusta a largura para ocupar todo o espaço
+          style={{ width: '100%', minWidth: '100px' }}
         />
       ),
     },
@@ -132,8 +158,8 @@ const TelaFinanceiro = () => {
       width: '30%',
       render: (text, record) => (
         <Select
-          value={text}
-          style={{ width: '100%' }} // Ajusta a largura para ocupar todo o espaço
+          value={record.status}
+          style={{ width: '100%' }}
           onChange={(value) => handleStatusChange(record.key, value)}
         >
           <Option value="NÃO PAGO">Não Pago</Option>
@@ -145,16 +171,12 @@ const TelaFinanceiro = () => {
 
   return (
     <Layout>
-      {/* Header Section */}
       <Header style={{ backgroundColor: '#001529', color: '#fff', textAlign: 'center', padding: '0 50px' }}>
         <h1 style={{ color: '#fff' }}>Financeiro</h1>
       </Header>
 
-      {/* Content Section */}
       <Content style={{ padding: '20px', margin: '20px 0', minHeight: '100vh' }}>
-        <div style={{ background: '#fff', padding: '24px', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
-          
-          {/* Month Navigation */}
+        <div style={{ background: '#fff', padding: '24px', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', maxHeight: '70vh', overflowY: 'auto' }}>
           <Row justify="space-between" align="middle" style={{ marginBottom: '20px' }}>
             <Col>
               <Button icon={<LeftOutlined />} onClick={() => changeMonth(-1)}>Anterior</Button>
@@ -166,28 +188,28 @@ const TelaFinanceiro = () => {
               <Button icon={<RightOutlined />} onClick={() => changeMonth(1)}>Próximo</Button>
             </Col>
           </Row>
-          
-          {/* Botão de Mês Atual */}
+
           <div style={{ textAlign: 'center', marginBottom: '20px' }}>
             <Button type="primary" onClick={goToCurrentMonth}>Mês Atual</Button>
           </div>
 
-          {/* Transaction Table */}
           <Table
             columns={columns}
             dataSource={transactionData}
-            scroll={{ x: false }} // Habilita rolagem horizontal
-            pagination={false} // Desabilitar paginação, se não necessário
+            pagination={false}
+            scroll={{ x: "100%" }}
+            style={{ width: "100%", height:'100%' }}
+            //scroll={{ }} // Adiciona rolagem vertical à tabela
             summary={(pageData) => {
               let total = 0;
               pageData.forEach(({ valorPago, status }) => {
-                if (status === 'PAGO') { // Somando apenas os "PAGO"
+                if (status === 'PAGO') {
                   total += valorPago;
                 }
               });
               return (
                 <Table.Summary.Row>
-                  <Table.Summary.Cell colSpan={1}>Total Pago</Table.Summary.Cell>
+                  <Table.Summary.Cell colSpan={2}>Total Pago</Table.Summary.Cell>
                   <Table.Summary.Cell>{total.toFixed(2)} R$</Table.Summary.Cell>
                   <Table.Summary.Cell />
                 </Table.Summary.Row>
@@ -195,14 +217,12 @@ const TelaFinanceiro = () => {
             }}
           />
 
-          {/* Botão para atualizar os dados */}
           <div style={{ textAlign: 'center', marginTop: '20px' }}>
             <Button type="primary" onClick={updateTransactionData}>Salvar Alterações</Button>
           </div>
         </div>
       </Content>
 
-      {/* Footer Section */}
       <Footer style={{ paddingTop: '35px', textAlign: 'center' }}>
         Ant Design ©2024 Created by You
       </Footer>
