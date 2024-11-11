@@ -1,7 +1,7 @@
 import { Button, Card, Input, Layout, Select, Typography, message } from "antd";
 import React, { useEffect, useState } from "react";
 import InputMask from "react-input-mask";
-import './telaSettings.css';
+import "./telaSettings.css";
 
 const { Header, Content, Footer } = Layout;
 const { Title, Text } = Typography;
@@ -81,36 +81,84 @@ const TelaSettings = () => {
     return date.toLocaleDateString("pt-BR");
   };
 
+  const formatFieldName = (field) => {
+    return field
+      .replace(/([A-Z])/g, " $1")
+      .replace(/^./, (str) => str.toUpperCase());
+  };
+
   if (!profile) {
     return <div>Carregando dados do perfil...</div>;
   }
 
   return (
-    <Layout style={{ minHeight: '100vh' }}>
+    <Layout style={{ minHeight: "100vh" }}>
       <Header className="layout-header">
-        <Title level={3} style={{ margin: 0, color: '#ffffff' }}>Configurações</Title>
-        
+        <Title level={3} style={{ margin: 0, color: "#ffffff" }}>
+          Configurações
+        </Title>
       </Header>
 
       <Content className="layout-content">
         <Title level={4}>Perfil do Usuário</Title>
         <Text>Gerencie suas informações pessoais</Text>
         <div className="profile-cards">
-          {['nome', 'operador', 'email', 'senha', 'cpf', 'dataNascimento', 'telefone', 'telefoneEmergencia', 'tipoSanguineo', 'ocupacao'].map((field, index) => (
+          {[
+            "nome",
+            "operador",
+            "email",
+            "senha",
+            "cpf",
+            "dataNascimento",
+            "telefone",
+            "telefoneEmergencia",
+            "tipoSanguineo",
+            "ocupacao",
+            "role",
+          ].map((field) => (
             <Card className="card" key={field}>
-              <div className="card-title">{field.charAt(0).toUpperCase() + field.slice(1)}:</div>
-              {isEditing ? (
-                field === 'senha' ? (
+              <div className="card-title">
+                {formatFieldName(field)}:
+              </div>
+              {isEditing && field !== "role" ? (
+                field === "senha" ? (
                   <Input.Password name={field} onChange={handleChange} />
-                ) : field === 'tipoSanguineo' ? (
+                ) : field === "cpf" ? (
+                  <InputMask
+                    mask="999.999.999-99"
+                    value={profile[field]}
+                    onChange={handleChange}
+                  >
+                    {(inputProps) => <Input {...inputProps} name={field} />}
+                  </InputMask>
+                ) : field === "dataNascimento" ? (
+                  <Input
+                    type="date"
+                    name={field}
+                    value={profile[field]}
+                    onChange={handleChange}
+                  />
+                ) : field === "telefone" || field === "telefoneEmergencia" ? (
+                  <InputMask
+                    mask="(99)99999-9999"
+                    value={profile[field]}
+                    onChange={handleChange}
+                  >
+                    {(inputProps) => <Input {...inputProps} name={field} />}
+                  </InputMask>
+                ) : field === "tipoSanguineo" ? (
                   <Select
                     value={profile[field]}
                     onChange={handleSelectChange}
                     style={{ width: "100%" }}
                   >
-                    {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(bloodType => (
-                      <Option key={bloodType} value={bloodType}>{bloodType}</Option>
-                    ))}
+                    {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(
+                      (bloodType) => (
+                        <Option key={bloodType} value={bloodType}>
+                          {bloodType}
+                        </Option>
+                      )
+                    )}
                   </Select>
                 ) : (
                   <Input
@@ -120,7 +168,11 @@ const TelaSettings = () => {
                   />
                 )
               ) : (
-                <Text>{field === 'dataNascimento' ? formatDate(profile[field]) : profile[field]}</Text>
+                <Text>
+                  {field === "dataNascimento"
+                    ? formatDate(profile[field])
+                    : profile[field]}
+                </Text>
               )}
             </Card>
           ))}
@@ -130,11 +182,7 @@ const TelaSettings = () => {
             {isEditing ? "Cancelar" : "Editar"}
           </Button>
           {isEditing && (
-            <Button
-              type="primary"
-              onClick={updateUser}
-              className="save-button"
-            >
+            <Button type="primary" onClick={updateUser} className="save-button">
               Salvar
             </Button>
           )}
@@ -142,7 +190,9 @@ const TelaSettings = () => {
       </Content>
 
       <Footer className="footer">
-        <Text style={{ color: '#333' }}>Configurações ©2024 | Todos os direitos reservados</Text>
+        <Text style={{ color: "#333" }}>
+          Configurações ©2024 | Todos os direitos reservados
+        </Text>
       </Footer>
     </Layout>
   );

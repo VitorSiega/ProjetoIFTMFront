@@ -175,53 +175,55 @@ const TelaFinanceiro = () => {
         <h1 style={{ color: '#fff' }}>Financeiro</h1>
       </Header>
 
-      <Content style={{ padding: '20px', margin: '20px 0', minHeight: '100vh' }}>
-        <div style={{ background: '#fff', padding: '24px', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)', maxHeight: '70vh', overflowY: 'auto' }}>
-          <Row justify="space-between" align="middle" style={{ marginBottom: '20px' }}>
-            <Col>
-              <Button icon={<LeftOutlined />} onClick={() => changeMonth(-1)}>Anterior</Button>
-            </Col>
-            <Col>
-              <Typography.Title level={4}>{getFormattedMonthYear()}</Typography.Title>
-            </Col>
-            <Col>
-              <Button icon={<RightOutlined />} onClick={() => changeMonth(1)}>Próximo</Button>
-            </Col>
-          </Row>
+      <Content style={{ padding: '20px', margin: '20px 0' }}>
+  <div style={{ background: '#fff', padding: '24px', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
+    <Row justify="space-between" align="middle" style={{ marginBottom: '20px' }}>
+      <Col>
+        <Button icon={<LeftOutlined />} onClick={() => changeMonth(-1)}>Anterior</Button>
+      </Col>
+      <Col>
+        <Typography.Title level={4}>{getFormattedMonthYear()}</Typography.Title>
+      </Col>
+      <Col>
+        <Button icon={<RightOutlined />} onClick={() => changeMonth(1)}>Próximo</Button>
+      </Col>
+    </Row>
 
-          <div style={{ textAlign: 'center', marginBottom: '20px' }}>
-            <Button type="primary" onClick={goToCurrentMonth}>Mês Atual</Button>
-          </div>
+    <div style={{ textAlign: 'center', marginBottom: '20px' }}>
+      <Button type="primary" onClick={goToCurrentMonth}>Mês Atual</Button>
+    </div>
 
-          <Table
-            columns={columns}
-            dataSource={transactionData}
-            pagination={false}
-            scroll={{ x: "100%" }}
-            style={{ width: "100%", height:'100%' }}
-            //scroll={{ }} // Adiciona rolagem vertical à tabela
-            summary={(pageData) => {
-              let total = 0;
-              pageData.forEach(({ valorPago, status }) => {
-                if (status === 'PAGO') {
-                  total += valorPago;
-                }
-              });
-              return (
-                <Table.Summary.Row>
-                  <Table.Summary.Cell colSpan={2}>Total Pago</Table.Summary.Cell>
-                  <Table.Summary.Cell>{total.toFixed(2)} R$</Table.Summary.Cell>
-                  <Table.Summary.Cell />
-                </Table.Summary.Row>
-              );
-            }}
-          />
+    <div style={{ overflowX: 'auto' }}> {/* Contêiner de rolagem horizontal */}
+      <Table
+        columns={columns}
+        dataSource={transactionData}
+        pagination={false}
+        style={{ width: "100%" }}
+        summary={(pageData) => {
+          let total = 0;
+          pageData.forEach(({ valorPago, status }) => {
+            if (status === 'PAGO') {
+              total += valorPago;
+            }
+          });
+          return (
+            <Table.Summary.Row>
+              <Table.Summary.Cell colSpan={2}>Total Pago</Table.Summary.Cell>
+              <Table.Summary.Cell>{total.toFixed(2)} R$</Table.Summary.Cell>
+              <Table.Summary.Cell />
+            </Table.Summary.Row>
+          );
+        }}
+      />
+    </div>
 
-          <div style={{ textAlign: 'center', marginTop: '20px' }}>
-            <Button type="primary" onClick={updateTransactionData}>Salvar Alterações</Button>
-          </div>
-        </div>
-      </Content>
+    <div style={{ textAlign: 'center', marginTop: '20px' }}>
+      <Button type="primary" onClick={updateTransactionData}>Salvar Alterações</Button>
+    </div>
+  </div>
+</Content>
+
+
 
       <Footer style={{ paddingTop: '35px', textAlign: 'center' }}>
         Ant Design ©2024 Created by You

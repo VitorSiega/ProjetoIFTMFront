@@ -196,7 +196,7 @@ const TelaOperador = () => {
         </Space>
       ),
       //fixed: "left",
-      width: 180,
+      width: 200,
     },
     {
       title: "Status",
@@ -413,7 +413,7 @@ const TelaOperador = () => {
             </InputMask>
           </Form.Item>
 
-          <Form.Item label="Tipo Sanguíneo" name="tipoSanguineo">
+          <Form.Item label="Tipo Sanguíneo" name="tipo Sanguineo">
             <Select>
               <Option value="A+">A+</Option>
               <Option value="A-">A-</Option>
