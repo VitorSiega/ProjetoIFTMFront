@@ -303,7 +303,7 @@ const TelaPresenca = () => {
   };
 
   return (
-    <Layout>
+    <Layout style={{margin: "20px 0 20px 0"}}>
       <Header
         style={{
           backgroundColor: "#001529",
@@ -316,7 +316,7 @@ const TelaPresenca = () => {
       </Header>
 
       <Content
-        style={{ padding: "0 20px", margin: "20px 0 20px 0", height: "200%" }}
+        style={{ padding: "0 20px", margin: "20px 0 20px 0",height:"90%"}}
       >
         <div className="calendario-container">
           <Calendar
@@ -324,7 +324,7 @@ const TelaPresenca = () => {
             onChange={onDateChange}
             value={date}
           />
-          <div style={{ marginTop: "20px", textAlign: "center" }}>
+          <div style={{ marginTop: "20px", textAlign: "center", height:"25vh" }}>
             <Button
               type="primary"
               onClick={handleViewPresencas}
@@ -397,11 +397,10 @@ const TelaPresenca = () => {
             )}
           </Modal>
         </div>
-      </Content>
-
-      <Footer style={{ textAlign: "center", height: "10vh" }}>
+        <Footer style={{ textAlign: "center",borderRadius: "0 0 8px 8px", paddingBottom:""}}>
         Gestão usuários ©2024
       </Footer>
+      </Content>
     </Layout>
   );
 };

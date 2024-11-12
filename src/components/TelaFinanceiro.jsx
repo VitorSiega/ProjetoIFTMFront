@@ -170,12 +170,12 @@ const TelaFinanceiro = () => {
   ];
 
   return (
-    <Layout>
+    <Layout style={{margin: "20px 0 20px 0"}}>
       <Header style={{ backgroundColor: '#001529', color: '#fff', textAlign: 'center', padding: '0 50px' }}>
         <h1 style={{ color: '#fff' }}>Financeiro</h1>
       </Header>
 
-      <Content style={{ padding: '20px', margin: '20px 0' }}>
+      <Content style={{ padding: "0 20px", margin: "20px 0 20px 0",height:"90%" }}>
   <div style={{ background: '#fff', padding: '24px', borderRadius: '8px', boxShadow: '0 2px 8px rgba(0,0,0,0.1)' }}>
     <Row justify="space-between" align="middle" style={{ marginBottom: '20px' }}>
       <Col>
@@ -221,13 +221,10 @@ const TelaFinanceiro = () => {
       <Button type="primary" onClick={updateTransactionData}>Salvar Alterações</Button>
     </div>
   </div>
-</Content>
-
-
-
-      <Footer style={{ paddingTop: '35px', textAlign: 'center' }}>
-        Ant Design ©2024 Created by You
+  <Footer style={{textAlign: 'center' }}>
+  Gestão usuários ©2024
       </Footer>
+</Content>
     </Layout>
   );
 };

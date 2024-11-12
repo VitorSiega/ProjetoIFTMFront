@@ -282,8 +282,8 @@ const TelaOperador = () => {
     },
   ];
 
-  return (
-    <Layout>
+  return(
+    <Layout style={{ margin: "20px 0 20px 0", height:"90%"}}>
       <Header
         style={{
           backgroundColor: "#001529",
@@ -295,13 +295,13 @@ const TelaOperador = () => {
         <h1 style={{ color: "#fff" }}>Operador</h1>
       </Header>
       <Content
-        style={{ padding: "0 20px", margin: "20px 0 20px 0", height: "200%" }}
+        style={{ padding: "0 20px", margin: "20px 0 20px 0",height:"90%"}}
       >
         <div
           style={{
             background: "#fff",
             padding: "24px",
-            borderRadius: "8px",
+            borderRadius: "8px 8px 0 0",
             boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
             height: "100%",
           }}
@@ -350,7 +350,7 @@ const TelaOperador = () => {
           </div>
         </div>
 
-        <Footer style={{ textAlign: "center", height: "10vh" }}>
+        <Footer style={{ textAlign: "center",borderRadius: "0 0 8px 8px"}}>
           Gestão usuários ©2024
         </Footer>
       </Content>
