@@ -1,8 +1,6 @@
 import { PlusOutlined } from "@ant-design/icons";
 import { Button, Form, Input, Layout, message, Modal, Popconfirm, Select, Space, Table, } from "antd";
 import React, { useEffect, useState } from "react";
-import InputMask from "react-input-mask";
-
 const TelaOperador = () => {
   const [dataSource, setDataSource] = useState([]);
   const [editingUser, setEditingUser] = useState(null);
@@ -388,7 +386,7 @@ const TelaOperador = () => {
             <Input type="number" />
           </Form.Item>
 
-          <Form.Item
+          {/* <Form.Item
             label="CPF"
             name="cpf"
             rules={[{ required: true, message: "Por favor, insira o CPF" }]}
@@ -412,7 +410,59 @@ const TelaOperador = () => {
               {(inputProps) => <Input {...inputProps} />}
             </InputMask>
           </Form.Item>
+           */}
 
+<Form.Item
+  label="CPF"
+  name="cpf"
+  rules={[
+    { required: true, message: "Por favor, insira o CPF" },
+    {
+      validator: (_, value) =>
+        /^\d{3}\.\d{3}\.\d{3}-\d{2}$/.test(value)
+          ? Promise.resolve()
+          : Promise.reject(new Error("CPF inválido")),
+    },
+  ]}
+>
+  <Input />
+</Form.Item>
+
+<Form.Item label="Data de Nascimento" name="dataNascimento">
+  <Input type="date" />
+</Form.Item>
+
+<Form.Item
+  label="Telefone"
+  name="telefone"
+  rules={[
+    { required: true, message: "Por favor, insira o número de telefone" },
+    {
+      validator: (_, value) =>
+        /^\(\d{2}\)\d{5}-\d{4}$/.test(value)
+          ? Promise.resolve()
+          : Promise.reject(new Error("Telefone inválido, use o formato (99)99999-9999")),
+    },
+  ]}
+>
+  <Input />
+</Form.Item>
+
+<Form.Item
+  label="Telefone Emergência"
+  name="telefoneEmergencia"
+  rules={[
+    { required: true, message: "Por favor, insira o número de emergência" },
+    {
+      validator: (_, value) =>
+        /^\(\d{2}\)\d{5}-\d{4}$/.test(value)
+          ? Promise.resolve()
+          : Promise.reject(new Error("Telefone inválido, use o formato (99)99999-9999")),
+    },
+  ]}
+>
+  <Input />
+</Form.Item>
           <Form.Item label="Tipo Sanguíneo" name="tipo Sanguineo">
             <Select>
               <Option value="A+">A+</Option>
